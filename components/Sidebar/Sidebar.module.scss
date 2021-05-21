@@ -1,0 +1,63 @@
+@use 'sidebar';
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column;
+  transition: transform 0.2s ease-in-out, max-width 0.2s ease-in-out 0.1s;
+
+  background: sidebar.$bg;
+  color: sidebar.$fg;
+  max-width: sidebar.$expanded-width;
+
+  &__items {
+    min-width: sidebar.$expanded-width;
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    // Ensure there is always only "2rem" of
+    // margin between elements
+    & + & {
+      margin-top: 0;
+    }
+
+    // Fix elements to the bottom by setting
+    // "margin-top: auto" on the first element
+    &.bottom {
+      margin-top: auto;
+      & ~ & {
+        margin-top: inherit;
+      }
+    }
+
+    &.seperator::before {
+      content: '';
+      position: absolute;
+      top: -2rem;
+      height: 0.1rem;
+      background: sidebar.$bg-seperator;
+      border-radius: 0.05rem;
+      margin: 1rem 2.5rem;
+      width: calc(100% - 5rem);
+      transition: width 0.2s ease-in-out 0.1s;
+    }
+  }
+
+  &.collapsed {
+    max-width: sidebar.$width + 1.5rem;
+    transform: translateX(-1.5rem);
+
+    .sidebar__items.seperator::before {
+      width: 2rem;
+    }
+  }
+}
